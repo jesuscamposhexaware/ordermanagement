@@ -6,9 +6,9 @@ import lombok.Data;
 @SuppressWarnings("unused")
 public class OrderDetailDto {
 	
-	private Integer orderId;
+	private Long orderId;
 	
-	private ProductDto product;
+	private Long productId;
 	
 	private Integer quantity;
 	

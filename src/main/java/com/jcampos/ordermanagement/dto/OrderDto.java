@@ -22,5 +22,5 @@ public class OrderDto {
 	private Object giftMessage;
 	
 	@NotNull
-	private List<ProductDto> products;
+	private List<OrderDetailDto> products;
 }
