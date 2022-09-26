@@ -20,7 +20,7 @@ public class UserToDtoConverter implements Converter<User, UserDto> {
 		target.setName(source.getName());
 		target.setLastName(source.getLastName());
 		target.setAge(source.getAge());
-		return null;
+		return target;
 	}
 
 }
