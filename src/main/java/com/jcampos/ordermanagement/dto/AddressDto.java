@@ -3,7 +3,6 @@ package com.jcampos.ordermanagement.dto;
 import lombok.Data;
 
 @Data
-@SuppressWarnings("unused")
 public class AddressDto {
 
 	private Long idAddress;

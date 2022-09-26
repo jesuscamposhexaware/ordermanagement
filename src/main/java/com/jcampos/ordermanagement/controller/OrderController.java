@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,46 +18,47 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jcampos.ordermanagement.controller.intf.IOrderController;
-import com.jcampos.ordermanagement.dto.OrderDetailDto;
 import com.jcampos.ordermanagement.dto.OrderDto;
+import com.jcampos.ordermanagement.service.intf.IOrderService;
 
 @RestController
 @RequestMapping("/order")
 public class OrderController implements IOrderController {
 	
+	@Autowired
+	private IOrderService orderService;
+	
 	@GetMapping("/{id}")
 	@Override
-	public List<OrderDetailDto> getDetailsByOrderId(@PathVariable Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public OrderDto getById(@PathVariable Long id) {
+		return orderService.getOrderById(id);
 	}
 
 	@GetMapping
 	@Override
-	public List<OrderDto> getByUserId(@RequestParam Integer idUser) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<OrderDto> getByUserId(@RequestParam Long idUser) {
+		return orderService.getOrdersByUserId(idUser);
 	}
 
 	@PostMapping
 	@Override
-	public OrderDto create(@Valid @RequestBody OrderDto orderDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<OrderDto> create(@Valid @RequestBody OrderDto orderDto) {
+		return new ResponseEntity<OrderDto>(orderService.createOrder(orderDto),
+				HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")
 	@Override
-	public OrderDto delete(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<Void> delete(Long id) {
+		orderService.deleteOrder(id);
+		
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
 	@PutMapping("/{id}")
 	@Override
-	public OrderDto update(@PathVariable Integer id, @Valid @RequestBody OrderDto orderDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public OrderDto update(@PathVariable Long id, @Valid @RequestBody OrderDto orderDto) {
+		return orderService.updateOrder(id, orderDto);
 	}
 
 }

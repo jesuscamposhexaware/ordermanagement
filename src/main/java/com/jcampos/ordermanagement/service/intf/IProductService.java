@@ -8,6 +8,6 @@ public interface IProductService {
 	
 	public List<ProductDto> getAllProducts();
 	
-	public ProductDto getProductById(Integer idProduct);
+	public ProductDto getProductById(Long idProduct);
 
 }

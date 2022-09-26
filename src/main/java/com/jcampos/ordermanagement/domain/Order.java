@@ -56,7 +56,7 @@ public class Order {
 	private String country;
 	
 	@Column(name = "zip_code")
-	private String zip_code;
+	private String zipCode;
 	
 	@Column(name = "created_at")
 	private Instant createdAt;

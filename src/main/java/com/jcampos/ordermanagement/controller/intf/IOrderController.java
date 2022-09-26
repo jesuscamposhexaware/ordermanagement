@@ -2,19 +2,18 @@ package com.jcampos.ordermanagement.controller.intf;
 
 import java.util.List;
 
-import com.jcampos.ordermanagement.dto.OrderDetailDto;
 import com.jcampos.ordermanagement.dto.OrderDto;
 
 public interface IOrderController {
 	
-	public List<OrderDto> getByUserId(Integer idUser);
+	public List<OrderDto> getByUserId(Long idUser);
 	
-	public List<OrderDetailDto> getDetailsByOrderId(Integer id);
+	public OrderDto getById(Long id);
 	
-	public OrderDto create(OrderDto orderDto);
+	public Object create(OrderDto orderDto);
 	
-	public OrderDto delete(Integer id);
+	public Object delete(Long id);
 	
-	public OrderDto update(Integer id, OrderDto orderDto);
+	public OrderDto update(Long id, OrderDto orderDto);
 
 }

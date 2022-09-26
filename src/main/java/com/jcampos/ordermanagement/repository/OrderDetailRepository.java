@@ -11,5 +11,5 @@ import com.jcampos.ordermanagement.domain.OrderDetailKey;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailKey>{
 
-	public List<OrderDetail> findByOrderIdOrder(Long idOrder);
+	public List<OrderDetail> findByKeyOrderIdOrder(Long idOrder);
 }

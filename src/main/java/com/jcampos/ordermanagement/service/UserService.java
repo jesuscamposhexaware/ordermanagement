@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jcampos.ordermanagement.converter.UserToDtoConverter;
 import com.jcampos.ordermanagement.dto.UserDto;
 import com.jcampos.ordermanagement.repository.UserRepository;
 import com.jcampos.ordermanagement.service.intf.IUserService;
 
+@Service
 public class UserService implements IUserService {
 
 	@Autowired

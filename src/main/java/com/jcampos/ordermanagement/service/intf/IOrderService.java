@@ -6,6 +6,8 @@ import com.jcampos.ordermanagement.dto.OrderDto;
 
 public interface IOrderService {
 
+	public OrderDto getOrderById(Long id);
+	
 	public List<OrderDto> getOrdersByUserId(Long idUser);
 	
 	public OrderDto createOrder(OrderDto orderDto);

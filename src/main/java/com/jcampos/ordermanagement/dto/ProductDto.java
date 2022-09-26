@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-@SuppressWarnings("unused")
 public class ProductDto {
 	
 	@NotNull

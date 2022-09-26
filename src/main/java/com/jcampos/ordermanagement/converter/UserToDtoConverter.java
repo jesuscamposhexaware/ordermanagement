@@ -11,7 +11,15 @@ public class UserToDtoConverter implements Converter<User, UserDto> {
 
 	@Override
 	public UserDto convert(User source) {
-		// TODO Auto-generated method stub
+		if(source == null)
+			return null;
+		
+		UserDto target = new UserDto();
+		target.setUserId(source.getIdUser());
+		target.setEmail(source.getEmail());
+		target.setName(source.getName());
+		target.setLastName(source.getLastName());
+		target.setAge(source.getAge());
 		return null;
 	}
 

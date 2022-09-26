@@ -17,7 +17,7 @@ import lombok.Setter;
 public class OrderDetail {
 
 	@EmbeddedId
-	private OrderDetailKey idOrderDetail;
+	private OrderDetailKey key;
 	
 	@Column(name = "quantity")
 	private Integer quantity;
