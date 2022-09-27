@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,17 @@ public class UserControllerImpl implements UserController {
 	@GetMapping
 	public List<UserDto> getAll() {
 		return userService.getAllUsers();
+	}
+
+	@Override
+	@GetMapping("/{id}")
+	public UserDto getById(@PathVariable Long id) {
+		return userService.getUserById(id);
+	}
+
+	@Override
+	public UserDto getByEmail(String email) {
+		return userService.getUserByEmail(email);
 	}
 
 }
