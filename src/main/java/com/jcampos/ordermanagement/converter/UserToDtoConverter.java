@@ -17,6 +17,7 @@ public class UserToDtoConverter implements Converter<User, UserDto> {
 		UserDto target = new UserDto();
 		target.setUserId(source.getIdUser());
 		target.setEmail(source.getEmail());
+		target.setRole(source.getRole());
 		target.setName(source.getName());
 		target.setLastName(source.getLastName());
 		target.setAge(source.getAge());

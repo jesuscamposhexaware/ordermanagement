@@ -32,8 +32,9 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@Override
-	public UserDto getByEmail(String email) {
-		return userService.getUserByEmail(email);
+	@GetMapping("/email/{id}")
+	public UserDto getByEmail(@PathVariable String id) {
+		return userService.getUserByEmail(id);
 	}
 
 }

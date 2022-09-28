@@ -15,14 +15,14 @@ public class ProductToDtoConverter implements Converter<Product, ProductDto>{
 			return null;
 		
 		ProductDto target = new ProductDto();
-		target.setIdProdcut(source.getIdProduct());
+		target.setIdProduct(source.getIdProduct());
 		target.setName(source.getName());
 		target.setDescription(source.getDescription());
 		target.setPrice(source.getPrice());
 		target.setStock(source.getStock());
 		target.setPicture(source.getPicture());
 		
-		return null;
+		return target;
 	}
 
 }

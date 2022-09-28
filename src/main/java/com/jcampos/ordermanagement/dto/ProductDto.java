@@ -8,7 +8,7 @@ import lombok.Data;
 public class ProductDto {
 	
 	@NotNull
-	private Long idProdcut;
+	private Long idProduct;
 	
 	private String name;
 	
