@@ -1,5 +1,7 @@
 package com.jcampos.ordermanagement.converter;
 
+import java.time.Instant;
+
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,7 @@ public class DtoToOrderConverter implements Converter<OrderDto, Order>{
 		target.setGiftMessage((String) source.getGiftMessage());
 		target.setGiftMessageType(source.getGiftMessageType());
 		target.setStatus(source.getStatus());
+		target.setCreatedAt(source.getCreatedAt() != null ? Instant.parse(source.getCreatedAt()) : null);
 		return target;
 	}
 
