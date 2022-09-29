@@ -39,7 +39,7 @@ public class OrderDtoTests {
 		orderDto.setCity("");
 		orderDto.setCountry("");
 		orderDto.setCreatedAt("");
-		orderDto.setGiftMessage(new byte[1]);
+		orderDto.setGiftMessage("");
 		orderDto.setGiftMessageType("");
 		orderDto.setIdOrder(1l);
 		orderDto.setIdUser(1l);
