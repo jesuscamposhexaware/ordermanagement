@@ -25,7 +25,7 @@ public class OrderDetailKey implements Serializable{
 	private Order order;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_prodcut")
+	@JoinColumn(name = "id_product")
 	private Product product;
 
 }

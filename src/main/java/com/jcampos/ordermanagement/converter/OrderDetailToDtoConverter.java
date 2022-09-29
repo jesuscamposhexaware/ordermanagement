@@ -15,13 +15,15 @@ public class OrderDetailToDtoConverter implements Converter<OrderDetail, OrderDe
 			return null;
 		
 		OrderDetailDto target = new OrderDetailDto();
-		target.setOrderId(source.getKey()
+		target.setIdOrder(source.getKey()
 				.getOrder().getIdOrder());
-		target.setProductId(source.getKey()
+		target.setIdProduct(source.getKey()
 				.getProduct().getIdProduct());
 		target.setQuantity(source.getQuantity());
-		target.setSold_price(source.getSoldPrice());
+		target.setPrice(source.getSoldPrice());
 		target.setSubtotal(source.getSubtotal());
+		target.setName(source.getKey().getProduct().getName());
+		target.setStock(source.getKey().getProduct().getStock());
 		
 		return target;
 	}

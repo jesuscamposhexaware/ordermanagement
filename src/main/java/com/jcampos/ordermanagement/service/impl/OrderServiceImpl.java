@@ -1,6 +1,7 @@
 package com.jcampos.ordermanagement.service.impl;
 
 import java.text.MessageFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.jcampos.ordermanagement.constant.Constants;
 import com.jcampos.ordermanagement.constant.ErrorMessage;
 import com.jcampos.ordermanagement.converter.DtoToOrderConverter;
 import com.jcampos.ordermanagement.converter.DtoToOrderDetailConverter;
@@ -88,6 +90,8 @@ public class OrderServiceImpl implements OrderService {
 					MessageFormat.format(ErrorMessage.USER_NOT_FOUND, String.valueOf(orderDto.getIdUser())));
 		
 		order.setUser(user.get());
+		order.setStatus(Constants.ORDER_STATUS_IN_PROGRESS);
+		order.setCreatedAt(Instant.now());
 		
 		// Save order and generate id order
 		order = orderRepository.save(order);
@@ -97,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		for (OrderDetailDto dto : orderDto.getOrderDetails()) {
 			OrderDetail orderDetail = dtoToOrderDetailConverter.convert(dto);
-			Optional<Product> productO = productRepository.findById(dto.getProductId());
+			Optional<Product> productO = productRepository.findById(dto.getIdProduct());
 			
 			// Validate if the product is eligible to order
 			Product product = validateProductForOrder(productO, dto, productsToUpdate);
@@ -109,10 +113,12 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		// Insert details for the order
-		orderDetailRepository.saveAll(orderDetails);
+		orderDetails = orderDetailRepository.saveAll(orderDetails);
 		
 		// Update stock of ordered products
 		productRepository.saveAll(productsToUpdate);
+		
+		order.setOrderDetails(orderDetails);
 		
 		return orderToDtoConverter.convert(order);
 		
@@ -139,8 +145,16 @@ public class OrderServiceImpl implements OrderService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					MessageFormat.format(ErrorMessage.ORDER_NOT_FOUND, id));
 		
+		Optional<User> user = userRepository.findById(orderDto.getIdUser());
+		
+		if(!user.isPresent())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					MessageFormat.format(ErrorMessage.USER_NOT_FOUND, String.valueOf(orderDto.getIdUser())));
+		
 		Order order = dtoToOrderConverter.convert(orderDto);
+		order.setUser(user.get());
 		order.setIdOrder(id);
+		order.setUpdatedAt(Instant.now());
 		
 		// Update order
 		order = orderRepository.save(order);
@@ -158,7 +172,7 @@ public class OrderServiceImpl implements OrderService {
 			
 			for (OrderDetailDto dto : orderDto.getOrderDetails()) {
 				OrderDetail orderDetail = dtoToOrderDetailConverter.convert(dto);
-				Optional<Product> productO = productRepository.findById(dto.getProductId());
+				Optional<Product> productO = productRepository.findById(dto.getIdProduct());
 				
 				// Validate if the product is eligible to order
 				Product product = validateProductForOrder(productO, dto, productsToUpdate);
@@ -177,6 +191,8 @@ public class OrderServiceImpl implements OrderService {
 			
 			// Delete records for discarded products
 			orderDetailRepository.deleteAllById(orderDetailKeys);
+			
+			order.setOrderDetails(orderDetails);
 		}
 		
 		return orderToDtoConverter.convert(order);
@@ -187,14 +203,14 @@ public class OrderServiceImpl implements OrderService {
 		// Product exists validation
 		if (!productO.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					MessageFormat.format(ErrorMessage.PRODUCT_NOT_FOUND, dto.getProductId()));
+					MessageFormat.format(ErrorMessage.PRODUCT_NOT_FOUND, dto.getIdProduct()));
 
 		Product product = productO.get();
 
 		// Stock validation
 		if(product.getStock() < dto.getQuantity())
 			throw new ResponseStatusException(HttpStatus.CONFLICT,
-					MessageFormat.format(ErrorMessage.PRODUCT_NOT_ENOUGH_STOCK_TO_ORDER, dto.getProductId()));
+					MessageFormat.format(ErrorMessage.PRODUCT_NOT_ENOUGH_STOCK_TO_ORDER, dto.getIdProduct()));
 
 		// Calculate new stock value after operation
 		product.setStock(product.getStock() - dto.getQuantity());
@@ -202,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
 		// Not duplicated product in order validation
 		if(!productSet.add(product))
 			throw new ResponseStatusException(HttpStatus.CONFLICT,
-					MessageFormat.format(ErrorMessage.DUPLICATE_PRODUCT_FOR_ORDER, dto.getProductId()));
+					MessageFormat.format(ErrorMessage.DUPLICATE_PRODUCT_FOR_ORDER, dto.getIdProduct()));
 		
 		return product;
 		

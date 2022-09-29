@@ -7,18 +7,22 @@ import lombok.Data;
 @Data
 public class OrderDetailDto {
 	
-	private Long orderId;
+	private Long idOrder;
 	
 	@NotNull
-	private Long productId;
+	private Long idProduct;
+	
+	private String name;
+	
+	private Integer stock;
 	
 	@NotNull
 	private Integer quantity;
 	
 	@NotNull
-	private Double sold_price;
+	private Double price;
 	
-	@NotNull
+	
 	private Double subtotal;
 
 }

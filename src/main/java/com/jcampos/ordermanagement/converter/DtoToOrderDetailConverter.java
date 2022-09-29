@@ -16,7 +16,7 @@ public class DtoToOrderDetailConverter implements Converter<OrderDetailDto, Orde
 		
 		OrderDetail target = new OrderDetail();
 		target.setQuantity(source.getQuantity());
-		target.setSoldPrice(source.getSold_price());
+		target.setSoldPrice(source.getPrice());
 		target.setSubtotal(source.getSubtotal());
 		
 		return target;

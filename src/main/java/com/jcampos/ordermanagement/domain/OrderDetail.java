@@ -3,6 +3,7 @@ package com.jcampos.ordermanagement.domain;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
+@Table(name="orderdetail")
 public class OrderDetail {
 
 	@EmbeddedId

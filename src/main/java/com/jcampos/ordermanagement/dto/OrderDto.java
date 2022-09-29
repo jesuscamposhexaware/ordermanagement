@@ -1,9 +1,10 @@
 package com.jcampos.ordermanagement.dto;
 
-import java.time.Instant;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -18,7 +19,9 @@ public class OrderDto {
 	@NotNull
 	private String receiverName;
 	
-	private Object giftMessage;
+	private byte[] giftMessage;
+	
+	private String giftMessageType;
 	
 	private String status;
 	
@@ -40,9 +43,9 @@ public class OrderDto {
 	@NotNull
 	private String zipCode;
 	
-	private Instant createdAt;
+	private String createdAt;
 	
-	private Instant updatedAt;
+	private String updatedAt;
 	
 	@NotNull
 	private List<OrderDetailDto> orderDetails;
