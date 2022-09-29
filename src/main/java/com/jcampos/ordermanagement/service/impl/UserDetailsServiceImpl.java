@@ -15,9 +15,14 @@ import org.springframework.stereotype.Service;
 
 import com.jcampos.ordermanagement.constant.Constants;
 import com.jcampos.ordermanagement.constant.ErrorMessage;
+import com.jcampos.ordermanagement.converter.ProductToDtoConverter;
+import com.jcampos.ordermanagement.repository.ProductRepository;
 import com.jcampos.ordermanagement.repository.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired

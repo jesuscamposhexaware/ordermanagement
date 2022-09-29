@@ -34,7 +34,10 @@ import com.jcampos.ordermanagement.repository.ProductRepository;
 import com.jcampos.ordermanagement.repository.UserRepository;
 import com.jcampos.ordermanagement.service.OrderService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
 	
 	@Autowired

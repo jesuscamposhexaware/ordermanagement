@@ -11,13 +11,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.jcampos.ordermanagement.constant.ErrorMessage;
+import com.jcampos.ordermanagement.converter.ProductToDtoConverter;
 import com.jcampos.ordermanagement.converter.UserToDtoConverter;
 import com.jcampos.ordermanagement.domain.User;
 import com.jcampos.ordermanagement.dto.UserDto;
+import com.jcampos.ordermanagement.repository.ProductRepository;
 import com.jcampos.ordermanagement.repository.UserRepository;
 import com.jcampos.ordermanagement.service.UserService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
 	@Autowired

@@ -17,7 +17,10 @@ import com.jcampos.ordermanagement.dto.ProductDto;
 import com.jcampos.ordermanagement.repository.ProductRepository;
 import com.jcampos.ordermanagement.service.ProductService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
 	@Autowired
