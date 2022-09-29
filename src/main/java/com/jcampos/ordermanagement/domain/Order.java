@@ -9,10 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -39,9 +38,9 @@ public class Order {
 	@Column(name = "status")
 	private String status;
 	
-	@Lob
+	//@Lob
 	@Column(name = "gift_message")
-	private byte[] giftMessage;
+	private String giftMessage;
 	
 	@Column(name = "gift_message_type")
 	private String giftMessageType;
@@ -73,7 +72,6 @@ public class Order {
 	@Column(name = "updated_at")
 	private Instant updatedAt;
 	
-	@OneToMany
-	@JoinColumn(name = "id_order")
+	@Transient
 	private List<OrderDetail> orderDetails;
 }

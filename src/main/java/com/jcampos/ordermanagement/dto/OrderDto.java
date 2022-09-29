@@ -2,9 +2,10 @@ package com.jcampos.ordermanagement.dto;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.web.multipart.MultipartFile;
+import com.jcampos.ordermanagement.constant.ErrorMessage;
 
 import lombok.Data;
 
@@ -13,40 +14,40 @@ public class OrderDto {
 	
 	private Long idOrder;
 	
-	@NotNull
+	@NotNull(message = "idUser" + ErrorMessage.NOT_NULL_VALIDATION)
 	private Long idUser;
 	
-	@NotNull
+	@NotNull(message = "receiverName" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String receiverName;
 	
-	private byte[] giftMessage;
+	private String giftMessage;
 	
 	private String giftMessageType;
 	
 	private String status;
 	
-	@NotNull
+	@NotNull(message = "total" + ErrorMessage.NOT_NULL_VALIDATION)
 	private Double total;
 	
-	@NotNull
+	@NotNull(message = "streetAddress" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String streetAddress;
 	
-	@NotNull
+	@NotNull(message = "city" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String city;
 	
-	@NotNull
+	@NotNull(message = "state" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String state;
 	
-	@NotNull
+	@NotNull(message = "country" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String country;
 	
-	@NotNull
+	@NotNull(message = "zipCode" + ErrorMessage.NOT_NULL_VALIDATION)
 	private String zipCode;
 	
 	private String createdAt;
 	
 	private String updatedAt;
 	
-	@NotNull
+	@Valid @NotNull(message = "orderDetails" + ErrorMessage.NOT_NULL_VALIDATION)
 	private List<OrderDetailDto> orderDetails;
 }

@@ -2,6 +2,8 @@ package com.jcampos.ordermanagement.dto;
 
 import javax.validation.constraints.NotNull;
 
+import com.jcampos.ordermanagement.constant.ErrorMessage;
+
 import lombok.Data;
 
 @Data
@@ -9,17 +11,17 @@ public class OrderDetailDto {
 	
 	private Long idOrder;
 	
-	@NotNull
+	@NotNull(message = "idProduct" + ErrorMessage.NOT_NULL_VALIDATION)
 	private Long idProduct;
 	
 	private String name;
 	
 	private Integer stock;
 	
-	@NotNull
+	@NotNull(message = "quantity" + ErrorMessage.NOT_NULL_VALIDATION)
 	private Integer quantity;
 	
-	@NotNull
+	@NotNull(message = "price" + ErrorMessage.NOT_NULL_VALIDATION)
 	private Double price;
 	
 	
