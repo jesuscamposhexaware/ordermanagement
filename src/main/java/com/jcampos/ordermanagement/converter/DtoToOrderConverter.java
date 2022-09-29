@@ -22,7 +22,7 @@ public class DtoToOrderConverter implements Converter<OrderDto, Order>{
 		target.setState(source.getState());
 		target.setCountry(source.getCountry());
 		target.setZipCode(source.getZipCode());
-		target.setGiftMessage(source.getGiftMessage());
+		target.setGiftMessage((String) source.getGiftMessage());
 		target.setGiftMessageType(source.getGiftMessageType());
 		target.setStatus(source.getStatus());
 		return target;

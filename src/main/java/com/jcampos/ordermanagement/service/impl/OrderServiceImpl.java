@@ -66,13 +66,20 @@ public class OrderServiceImpl implements OrderService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					MessageFormat.format(ErrorMessage.ORDER_NOT_FOUND, String.valueOf(id)));
 		
+		order.get().setOrderDetails(orderDetailRepository.findByOrderId(order.get().getIdOrder()));
+		
 		return orderToDtoConverter.convert(order.get());
 	}
 	
 	@Override
 	public List<OrderDto> getOrdersByUserId(Long idUser) {
-		return orderRepository.findByUserIdUser(idUser)
-				.stream()
+		List<Order> orders = orderRepository.findByUserIdUser(idUser);
+
+		orders.stream().forEach(o -> {
+			o.setOrderDetails(orderDetailRepository.findByOrderId(o.getIdOrder()));
+		});
+		
+		return orders.stream()
 				.map(o -> orderToDtoConverter.convert(o))
 				.collect(Collectors.toList());
 	}
@@ -98,14 +105,16 @@ public class OrderServiceImpl implements OrderService {
 		
 		List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 		Set<Product> productsToUpdate = new HashSet<Product>();
+		Set<Long> productsIds = new HashSet<Long>();
 		
 		for (OrderDetailDto dto : orderDto.getOrderDetails()) {
 			OrderDetail orderDetail = dtoToOrderDetailConverter.convert(dto);
 			Optional<Product> productO = productRepository.findById(dto.getIdProduct());
 			
 			// Validate if the product is eligible to order
-			Product product = validateProductForOrder(productO, dto, productsToUpdate);
-
+			Product product = validateProductForOrder(productO, dto, productsIds);
+			productsToUpdate.add(product);
+			
 			// Assign key to order detail after passing all the validations
 			orderDetail.setKey(new OrderDetailKey(order, product));
 			
@@ -125,12 +134,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteOrder(Long idOrder) {
 		
 		Optional<Order> order = orderRepository.findById(idOrder);
 	
-		if(order.isPresent())
+		if(order.isPresent()) {
+			orderDetailRepository.deleteAll(orderDetailRepository.findByOrderId(order.get().getIdOrder()));
 			orderRepository.delete(order.get());
+		}
 		else
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					MessageFormat.format(ErrorMessage.ORDER_NOT_FOUND, idOrder));
@@ -159,13 +171,14 @@ public class OrderServiceImpl implements OrderService {
 		// Update order
 		order = orderRepository.save(order);
 		
+		Set<Long> productsToDelete = orderDetailRepository.findByOrderId(id)
+				.stream()
+				.map(od -> od.getKey().getProduct().getIdProduct())
+				.collect(Collectors.toSet());
+		Set<Long> productsIds = new HashSet<Long>();
+		
 		// Logic to update order details
 		if(!CollectionUtils.isEmpty(orderDto.getOrderDetails())) {
-			
-			Set<OrderDetailKey> orderDetailKeys = orderDetailRepository.findByKeyOrderIdOrder(id)
-					.stream()
-					.map(od -> od.getKey())
-					.collect(Collectors.toSet());
 			
 			List<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
 			Set<Product> productsToUpdate = new HashSet<Product>();
@@ -175,22 +188,31 @@ public class OrderServiceImpl implements OrderService {
 				Optional<Product> productO = productRepository.findById(dto.getIdProduct());
 				
 				// Validate if the product is eligible to order
-				Product product = validateProductForOrder(productO, dto, productsToUpdate);
-
+				Product product = validateProductForOrder(productO, dto, productsIds);
+				productsToUpdate.add(product);
+				
 				// Assign key to order detail after passing all the validations
 				OrderDetailKey key = new OrderDetailKey(order, product);
 				orderDetail.setKey(key);
 				
 				orderDetails.add(orderDetail);
 				
-				orderDetailKeys.remove(key);
+				productsToDelete.remove(product.getIdProduct());
 			}
 			
 			// Insert details for the order
-			orderDetailRepository.saveAll(orderDetails);
+			orderDetails = orderDetailRepository.saveAll(orderDetails);
+			order.setOrderDetails(orderDetails);
+			
+			// Update stock of ordered products
+			productRepository.saveAll(productsToUpdate);
 			
 			// Delete records for discarded products
-			orderDetailRepository.deleteAllById(orderDetailKeys);
+			for(Long p : productsToDelete) {
+				Product prod = new Product();
+				prod.setIdProduct(p);
+				orderDetailRepository.deleteById(new OrderDetailKey(order, prod));
+			}
 			
 			order.setOrderDetails(orderDetails);
 		}
@@ -199,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
 
 	}
 	
-	private Product validateProductForOrder(Optional<Product> productO, OrderDetailDto dto, Set<Product> productSet) {
+	private Product validateProductForOrder(Optional<Product> productO, OrderDetailDto dto, Set<Long> productsIds) {
 		// Product exists validation
 		if (!productO.isPresent())
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -216,9 +238,10 @@ public class OrderServiceImpl implements OrderService {
 		product.setStock(product.getStock() - dto.getQuantity());
 
 		// Not duplicated product in order validation
-		if(!productSet.add(product))
+		if(!productsIds.add(product.getIdProduct()))
 			throw new ResponseStatusException(HttpStatus.CONFLICT,
 					MessageFormat.format(ErrorMessage.DUPLICATE_PRODUCT_FOR_ORDER, dto.getIdProduct()));
+		
 		
 		return product;
 		
